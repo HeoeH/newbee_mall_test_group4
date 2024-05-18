@@ -1,0 +1,26 @@
+# 数据源配置
+spring:
+  datasource:
+    name: newbee-mall-datasource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/newbee_mall_plus_db?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true&useSSL=false&allowMultiQueries=true&useAffectedRows=true
+    username: root
+    password: root
+    hikari:
+      pool-name: hikariCP
+      minimum-idle: 20
+      maximum-pool-size: 50
+      auto-commit: true
+      idle-timeout: 10000
+      max-lifetime: 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      password:
+      connect-timeout: 5000ms
+      timeout: 5000ms
+      client-type: lettuce
