@@ -30,6 +30,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PersonalController {
 
+    /**
+     * 测试用添加的setter
+     */
+    public void setNewBeeMallUserService(NewBeeMallUserService newBeeMallUserService) {
+        this.newBeeMallUserService = newBeeMallUserService;
+    }
+
     @Resource
     private NewBeeMallUserService newBeeMallUserService;
 
