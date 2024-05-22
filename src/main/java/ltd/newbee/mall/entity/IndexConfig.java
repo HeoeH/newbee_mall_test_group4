@@ -27,6 +27,23 @@ public class IndexConfig {
 
     private Byte isDeleted;
 
+    public IndexConfig() {
+    }
+
+    public IndexConfig(Long configId, String configName, Byte configType, Long goodsId, String redirectUrl, Integer configRank, Byte isDeleted, Date createTime, Integer createUser, Date updateTime, Integer updateUser) {
+        this.configId = configId;
+        this.configName = configName;
+        this.configType = configType;
+        this.goodsId = goodsId;
+        this.redirectUrl = redirectUrl;
+        this.configRank = configRank;
+        this.isDeleted = isDeleted;
+        this.createTime = createTime;
+        this.createUser = createUser;
+        this.updateTime = updateTime;
+        this.updateUser = updateUser;
+    }
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 

@@ -19,6 +19,7 @@ import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ import java.util.Objects;
  * @email 2449207463@qq.com
  * @link https://github.com/newbee-ltd
  */
+@Component
 @Controller
 @RequestMapping("/admin")
 public class NewBeeMallGoodsIndexConfigController {
@@ -56,19 +58,52 @@ public class NewBeeMallGoodsIndexConfigController {
     @RequestMapping(value = "/indexConfigs/list", method = RequestMethod.GET)
     @ResponseBody
     public Result list(@RequestParam Map<String, Object> params) {
-        if (StringUtils.isEmpty((CharSequence) params.get("page")) || StringUtils.isEmpty((CharSequence) params.get("limit"))) {
+        String pageStr = (String) params.get("page");
+        String limitStr = (String) params.get("limit");
+        String configTypeStr = (String) params.get("configType");
+
+        // 验证 page 参数是否为空或不是整数或负数或小数
+        if (StringUtils.isEmpty(pageStr) || !isInteger(pageStr) || Integer.parseInt(pageStr) <= 0) {
             return ResultGenerator.genFailResult("参数异常！");
         }
+
+        // 验证 limit 参数是否为空或不在允许的值范围内
+        if (StringUtils.isEmpty(limitStr) || !isInteger(limitStr) || !isValidLimit(Integer.parseInt(limitStr))) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+
+        // 验证 configType 参数是否为空或不在允许的值范围内
+        if (StringUtils.isEmpty(configTypeStr) || !isInteger(configTypeStr) || !isValidConfigType(Integer.parseInt(configTypeStr))) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+
         PageQueryUtil pageUtil = new PageQueryUtil(params);
         return ResultGenerator.genSuccessResult(newBeeMallIndexConfigService.getConfigsPage(pageUtil));
     }
 
+    private boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidLimit(int limit) {
+        return limit == 10 || limit == 20 || limit == 50;
+    }
+
+    private boolean isValidConfigType(int configType) {
+        return configType == 3 || configType == 4 || configType == 5;
+    }
     /**
      * 添加
      */
     @RequestMapping(value = "/indexConfigs/save", method = RequestMethod.POST)
     @ResponseBody
     public Result save(@RequestBody IndexConfig indexConfig) {
+        System.out.println(indexConfig);
         if (Objects.isNull(indexConfig.getConfigType())
                 || StringUtils.isEmpty(indexConfig.getConfigName())
                 || Objects.isNull(indexConfig.getConfigRank())) {
