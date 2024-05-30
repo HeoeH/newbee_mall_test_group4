@@ -25,4 +25,5 @@ public interface NewBeeMallSeckillService {
     ExposerVO exposerUrl(Long seckillId);
 
     SeckillSuccessVO executeSeckill(Long seckillId, Long userId);
+    SeckillSuccessVO executeSeckill(Long seckillId, Long userId, Long currentTime);
 }
