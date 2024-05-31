@@ -32,6 +32,7 @@ public class AdminController {
     @Resource
     public AdminUserService adminUserService;
 
+
     @GetMapping({"/login"})
     public String login() {
         return "admin/login";
@@ -87,13 +88,29 @@ public class AdminController {
         return "admin/profile";
     }
 
+    //    @PostMapping("/profile/password")
+//    @ResponseBody
+//    public String passwordUpdate(HttpServletRequest request, @RequestParam("originalPassword") String originalPassword,
+//                                 @RequestParam("newPassword") String newPassword) {
+//        if (StringUtils.isEmpty(originalPassword) || StringUtils.isEmpty(newPassword)) {
+//            return "参数不能为空";
+//        }
+//        Integer loginUserId = (int) request.getSession().getAttribute("loginUserId");
+//        if (adminUserService.updatePassword(loginUserId, originalPassword, newPassword)) {
+//            // 修改成功后清空session中的数据，前端控制跳转至登录页
+//            request.getSession().removeAttribute("loginUserId");
+//            request.getSession().removeAttribute("loginUser");
+//            request.getSession().removeAttribute("errorMsg");
+//            return ServiceResultEnum.SUCCESS.getResult();
+//        } else {
+//            return "修改失败";
+//        }
+//    }
     @PostMapping("/profile/password")
     @ResponseBody
-    public String passwordUpdate(HttpServletRequest request, HttpServletResponse response,
+    public String passwordUpdate(HttpServletRequest request,
                                  @RequestParam("originalPassword") String originalPassword,
                                  @RequestParam("newPassword") String newPassword) {
-        // Set the response encoding to UTF-8
-        response.setContentType("text/plain; charset=UTF-8");
 
         if (StringUtils.isEmpty(originalPassword) || StringUtils.isEmpty(newPassword)) {
             return "参数不能为空";
@@ -114,8 +131,11 @@ public class AdminController {
 
     @PostMapping("/profile/name")
     @ResponseBody
-    public String nameUpdate(HttpServletRequest request, @RequestParam("loginUserName") String loginUserName,
+    public String nameUpdate(HttpServletRequest request, HttpServletResponse response, @RequestParam("loginUserName") String loginUserName,
                              @RequestParam("nickName") String nickName) {
+        if (response != null) {
+            response.setContentType("text/plain; charset=UTF-8");
+        }
         if (StringUtils.isEmpty(loginUserName) || StringUtils.isEmpty(nickName)) {
             return "参数不能为空";
         }

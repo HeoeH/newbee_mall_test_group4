@@ -13,7 +13,10 @@ import ltd.newbee.mall.web.interceptor.NewBeeMallCartNumberInterceptor;
 import ltd.newbee.mall.web.interceptor.NewBeeMallLoginInterceptor;
 import ltd.newbee.mall.web.interceptor.RepeatSubmitInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,6 +31,17 @@ public class WebConfig implements WebMvcConfigurer {
     private NewBeeMallCartNumberInterceptor newBeeMallCartNumberInterceptor;
     @Autowired
     private RepeatSubmitInterceptor repeatSubmitInterceptor;
+
+    @Bean
+    public FilterRegistrationBean<CharacterEncodingFilter> characterEncodingFilter() {
+        FilterRegistrationBean<CharacterEncodingFilter> registrationBean = new FilterRegistrationBean<>();
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        registrationBean.setFilter(characterEncodingFilter);
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
