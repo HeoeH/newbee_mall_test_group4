@@ -34,6 +34,14 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
     @Autowired
     private MallUserMapper mallUserMapper;
 
+    /**
+     * 测试用添加setter
+     */
+    public void setMallUserMapper(MallUserMapper mallUserMapper) {
+        this.mallUserMapper = mallUserMapper;
+    }
+
+
     @Autowired
     private NewBeeMallCouponMapper newBeeMallCouponMapper;
 
@@ -123,6 +131,9 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
         }
         if (mallUserMapper.updateByPrimaryKeySelective(userFromDB) > 0) {
             NewBeeMallUserVO newBeeMallUserVO = new NewBeeMallUserVO();
+            /**
+             * 以下两行代码使用了临时变量newBeeMallUserVO无法使用EasyMock模拟
+             */
             BeanUtil.copyProperties(userFromDB, newBeeMallUserVO);
             httpSession.setAttribute(Constants.MALL_USER_SESSION_KEY, newBeeMallUserVO);
             return newBeeMallUserVO;

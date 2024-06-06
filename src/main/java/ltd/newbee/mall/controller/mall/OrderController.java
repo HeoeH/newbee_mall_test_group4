@@ -255,31 +255,68 @@ public class OrderController {
         return "mall/order-detail";
     }
 
+//    @PostMapping("/paySuccess")
+//    @ResponseBody
+//    public Result paySuccess(Integer payType, String orderNo, HttpServletRequest request) throws AlipayApiException {
+//        log.info("支付宝paySuccess通知数据记录：request.getParameterMap() is {}", JSON.toJSONString(request.getParameterMap()));
+//        if (payType == 1 && alipayConfig.getSigntype().equals(request.getParameter("sign_type"))
+//                && "trade_status_sync".equals(request.getParameter("notify_type"))
+//                && alipayConfig.getAppId().equals(request.getParameter("app_id"))
+//                && this.verifySign(request)) {
+//            String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
+//            if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
+//                return ResultGenerator.genSuccessResult();
+//            } else {
+//                return ResultGenerator.genFailResult(payResult);
+//            }
+//        } else if (payType == 2) {
+//            String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
+//            if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
+//                return ResultGenerator.genSuccessResult();
+//            } else {
+//                return ResultGenerator.genFailResult(payResult);
+//            }
+//        } else {
+//            return ResultGenerator.genFailResult("支付类型错误");
+//        }
+//    }
+
+    /**
+     *接口函数优化
+     */
     @PostMapping("/paySuccess")
     @ResponseBody
     public Result paySuccess(Integer payType, String orderNo, HttpServletRequest request) throws AlipayApiException {
-        log.info("支付宝paySuccess通知数据记录：request.getParameterMap() is {}", JSON.toJSONString(request.getParameterMap()));
-        if (payType == 1 && alipayConfig.getSigntype().equals(request.getParameter("sign_type"))
-                && "trade_status_sync".equals(request.getParameter("notify_type"))
-                && alipayConfig.getAppId().equals(request.getParameter("app_id"))
-                && this.verifySign(request)) {
-            String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
-            if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
-                return ResultGenerator.genSuccessResult();
-            } else {
-                return ResultGenerator.genFailResult(payResult);
-            }
-        } else if (payType == 2) {
-            String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
-            if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
-                return ResultGenerator.genSuccessResult();
-            } else {
-                return ResultGenerator.genFailResult(payResult);
-            }
-        } else {
+        // 提前验证支付类型，减少不必要的操作
+        if (payType != 1 && payType != 2) {
             return ResultGenerator.genFailResult("支付类型错误");
         }
+
+        // 支付宝支付（payType == 1）特定的验证逻辑
+        if (payType == 1) {
+            if (!isAlipayNotificationValid(request)) {
+                return ResultGenerator.genFailResult("支付宝通知验证失败");
+            }
+        }
+
+        // 调用支付成功处理逻辑
+        String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
+        if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult(payResult);
+        }
     }
+
+    // 新增方法用于支付宝通知验证，减少主方法的复杂度
+    private boolean isAlipayNotificationValid(HttpServletRequest request) throws AlipayApiException {
+        log.info("支付宝paySuccess通知数据记录：request.getParameterMap() is {}", JSON.toJSONString(request.getParameterMap()));
+        return alipayConfig.getSigntype().equals(request.getParameter("sign_type"))
+                && "trade_status_sync".equals(request.getParameter("notify_type"))
+                && alipayConfig.getAppId().equals(request.getParameter("app_id"))
+                && this.verifySign(request);
+    }
+
 
     /**
      * 验签
