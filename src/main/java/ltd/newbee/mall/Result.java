@@ -1,4 +1,4 @@
-package ltd.newbee.mall.test;
+package ltd.newbee.mall;
 
 public class Result<T> {
     private String result;
