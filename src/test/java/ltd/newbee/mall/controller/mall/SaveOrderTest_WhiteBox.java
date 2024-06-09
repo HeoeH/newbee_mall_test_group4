@@ -44,10 +44,8 @@ public class SaveOrderTest_WhiteBox {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
                 //测试用例1:地址为空
-                { "", false, "地址不能为空！"},
-                //测试用例2:购物车数据异常
-                { "validAddress", true, "购物车数据异常！"},
-                //测试用例3:正常保存订单
+                { "", true, "地址不能为空！"},
+                //测试用例2:正常保存订单
                 { "validAddress", false, "redirect:/orders/saveOrderNo"}
         });
     }

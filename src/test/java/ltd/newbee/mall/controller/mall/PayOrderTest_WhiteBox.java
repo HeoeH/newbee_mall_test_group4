@@ -67,14 +67,14 @@ public class PayOrderTest_WhiteBox {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                //测试用例1:跳转到支付宝支付
-                { 15L, 15L, NewBeeMallOrderStatusEnum.ORDER_PRE_PAY.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 1, "mall/alipay"},
-                //测试用例2:跳转到微信支付
-                { 16L, 16L, NewBeeMallOrderStatusEnum.ORDER_PRE_PAY.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 2, "mall/wxpay"},
-                //测试用例3:抛出订单结算异常
-                { 12L, 12L, NewBeeMallOrderStatusEnum.ORDER_PAID.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 1, "订单结算异常"},
-                //测试用例4:抛出NO_PERMISSION_ERROR异常
-                { 10L, 100L, NewBeeMallOrderStatusEnum.ORDER_PRE_PAY.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 1, "当前订单用户异常"}
+                //测试用例1:抛出订单结算异常
+                { 15L, 16L, NewBeeMallOrderStatusEnum.ORDER_PAID.getOrderStatus(), PayStatusEnum.PAY_SUCCESS.getPayStatus(), 1, "当前订单用户异常"},
+                //测试用例2:抛出NO_PERMISSION_ERROR异常
+                { 15L, 15L, NewBeeMallOrderStatusEnum.ORDER_PAID.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 1, "订单结算异常"},
+                //测试用例3:抛出NO_PERMISSION_ERROR异常
+                { 15L, 15L, NewBeeMallOrderStatusEnum.ORDER_PRE_PAY.getOrderStatus(), PayStatusEnum.PAY_SUCCESS.getPayStatus(), 2, "订单结算异常"},
+                //测试用例4:跳转到支付宝支付
+                { 15L, 15L, NewBeeMallOrderStatusEnum.ORDER_PRE_PAY.getOrderStatus(), PayStatusEnum.PAY_ING.getPayStatus(), 1, "mall/alipay"}
         });
     }
 

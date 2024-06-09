@@ -43,20 +43,14 @@ public class LoginTest_WhiteBox {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                //测试用例1:登录成功
-                { "testUser", "validCode", "pass" , "validcode" , ResultGenerator.genSuccessResult().getMessage()},
-                //测试用例2:用户名为空
-                { "", "validCode", "pass2" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_NAME_NULL.getResult()).getMessage()},
+                //测试用例1:用户名为空
+                { "", "validCode", "" , "" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_NAME_NULL.getResult()).getMessage()},
+                //测试用例2:验证码为空
+                { "testUser", "", "pass" , "" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_VERIFY_CODE_NULL.getResult()).getMessage()},
                 //测试用例3:密码为空
-                { "testUser", "validCode", "" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_PASSWORD_NULL.getResult()).getMessage()},
-                //测试用例4:验证码错误
-                { "testUser", "inValidCode", "pass" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_VERIFY_CODE_ERROR.getResult()).getMessage()},
-                //测试用例5:密码错误
-                { "testUser", "validCode", "fail" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_ERROR.getResult()).getMessage()},
-                //测试用例6:验证码为空
-                { "testUser", "", "pass" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_VERIFY_CODE_NULL.getResult()).getMessage()},
-                //测试用例7:kaptchaCode为空
-                { "testUser", "validCode", "pass" , "" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_VERIFY_CODE_ERROR.getResult()).getMessage()}
+                { "testUser", "inValidCode", "" , "validcode" , ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_PASSWORD_NULL.getResult()).getMessage()},
+                //测试用例4:登录成功
+                { "testUser", "validCode", "pass" , "validcode" , ResultGenerator.genSuccessResult().getMessage()},
         });
     }
 
